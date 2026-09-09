@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Equipment Borrowing System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: #1e293b;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 22px;
+        }
+
+        #logoutBtn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #logoutBtn:hover {
+            background: #dc2626;
+        }
+
+        /* MAIN */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 5px;
+        }
+
+        .welcome p {
+            color: #64748b;
+        }
+
+        /* DASHBOARD CARDS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .card .number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* COLORS */
+        .total {
+            border-left: 5px solid #3b82f6;
+        }
+
+        .available {
+            border-left: 5px solid #22c55e;
+        }
+
+        .borrowed {
+            border-left: 5px solid #f59e0b;
+        }
+
+        .returned {
+            border-left: 5px solid #8b5cf6;
+        }
+
+        .overdue {
+            border-left: 5px solid #ef4444;
+        }
+
+        /* QUICK ACTIONS */
+        .section {
+            margin-top: 35px;
+        }
+
+        .section h2 {
+            margin-bottom: 15px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* LOADING */
+        #loading {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 15px;
+            }
+
+            .navbar h1 {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION BAR -->
+    <div class="navbar">
+
+        <h1>Equipment Borrowing System</h1>
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+
+        <div class="welcome">
+
+            <h2>Dashboard</h2>
+
+            <p id="userEmail">
+                Checking user...
+            </p>
+
+        </div>
+
+
+        <div id="loading">
+            Loading dashboard...
+        </div>
+
+
+        <!-- DASHBOARD CARDS -->
+        <div class="cards">
+
+            <!-- TOTAL EQUIPMENT -->
+            <div class="card total">
+
+                <h3>Total Equipment</h3>
+
+                <div class="number" id="totalEquipment">
+                    0
+                </div>
+
+            </div>
+
+
+            <!-- AVAILABLE -->
+            <div class="card available">
+
+                <h3>Available</h3>
+
+                <div class="number" id="availableEquipment">
+                    0
+                </div>
+
+            </div>
+
+
+            <!-- BORROWED -->
+            <div class="card borrowed">
+
+                <h3>Borrowed</h3>
+
+                <div class="number" id="borrowedEquipment">
+                    0
+                </div>
+
+            </div>
+
+
+            <!-- RETURNED -->
+            <div class="card returned">
+
+                <h3>Returned</h3>
+
+                <div class="number" id="returnedEquipment">
+                    0
+                </div>
+
+            </div>
+
+
+            <!-- OVERDUE -->
+            <div class="card overdue">
+
+                <h3>Overdue</h3>
+
+                <div class="number" id="overdueEquipment">
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+        <div class="section">
+
+            <h2>Quick Actions</h2>
+
+            <div class="actions">
+
+                <button class="action-btn" onclick="location.href='equipment.html'">
+                    Manage Equipment
+                </button>
+
+                <button class="action-btn" onclick="location.href='transactions.html'">
+                    Borrowing Transactions
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUPABASE LIBRARY -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- SUPABASE CONNECTION -->
+    <script src="js/supabase.js"></script>
+
+
+    <script>
+
+        // ==============================
+        // CHECK LOGIN
+        // ==============================
+
+        async function checkUser() {
+
+            const {
+                data: { user },
+                error
+            } = await supabaseClient.auth.getUser();
+
+
+            if (error || !user) {
+
+                window.location.href = "login.html";
+
+                return;
+            }
+
+
+            document.getElementById("userEmail").textContent =
+                "Logged in as: " + user.email;
+
+        }
+
+
+        // ==============================
+        // LOAD DASHBOARD
+        // ==============================
+
+        async function loadDashboard() {
+
+            // TOTAL EQUIPMENT
+            const { count: total, error: totalError } =
+                await supabaseClient
+                    .from("equipment")
+                    .select("*", { count: "exact", head: true });
+
+
+            if (totalError) {
+
+                console.error(totalError);
+
+                return;
+            }
+
+
+            // AVAILABLE EQUIPMENT
+            const { count: available, error: availableError } =
+                await supabaseClient
+                    .from("equipment")
+                    .select("*", { count: "exact", head: true })
+                    .eq("availability", "Available");
+
+
+            if (availableError) {
+
+                console.error(availableError);
+
+                return;
+            }
+
+
+            // BORROWED EQUIPMENT
+            const { count: borrowed, error: borrowedError } =
+                await supabaseClient
+                    .from("equipment")
+                    .select("*", { count: "exact", head: true })
+                    .eq("availability", "Borrowed");
+
+
+            if (borrowedError) {
+
+                console.error(borrowedError);
+
+                return;
+            }
+
+
+            // RETURNED TRANSACTIONS
+            const { count: returned, error: returnedError } =
+                await supabaseClient
+                    .from("borrow_transactions")
+                    .select("*", { count: "exact", head: true })
+                    .eq("status", "Returned");
+
+
+            if (returnedError) {
+
+                console.error(returnedError);
+
+                return;
+            }
+
+
+            // OVERDUE TRANSACTIONS
+            const { count: overdue, error: overdueError } =
+                await supabaseClient
+                    .from("borrow_transactions")
+                    .select("*", { count: "exact", head: true })
+                    .eq("status", "Overdue");
+
+
+            if (overdueError) {
+
+                console.error(overdueError);
+
+                return;
+            }
+
+
+            // DISPLAY RESULTS
+
+            document.getElementById("totalEquipment").textContent =
+                total || 0;
+
+            document.getElementById("availableEquipment").textContent =
+                available || 0;
+
+            document.getElementById("borrowedEquipment").textContent =
+                borrowed || 0;
+
+            document.getElementById("returnedEquipment").textContent =
+                returned || 0;
+
+            document.getElementById("overdueEquipment").textContent =
+                overdue || 0;
+
+
+            document.getElementById("loading").style.display = "none";
+
+        }
+
+
+        // ==============================
+        // LOGOUT
+        // ==============================
+
+        document.getElementById("logoutBtn").addEventListener(
+            "click",
+            async function() {
+
+                const { error } =
+                    await supabaseClient.auth.signOut();
+
+
+                if (error) {
+
+                    alert("Logout failed: " + error.message);
+
+                    return;
+                }
+
+
+                window.location.href = "login.html";
+
+            }
+        );
+
+
+        // ==============================
+        // START
+        // ==============================
+
+        checkUser();
+
+        loadDashboard();
+
+    </script>
+
+</body>
+</html>
